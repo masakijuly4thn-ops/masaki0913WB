@@ -1,0 +1,136 @@
+@charset "utf-8";
+@use "../foundation/mixin" as m;
+@use "../foundation/color" as c;
+
+.l-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  padding: 0 max(calc((100% - 1100px) / 2), 2.5%);
+  background-color: rgba(c.$white, 0);
+  transition: background-color 0.4s, box-shadow 0.4s;
+  z-index: 100;
+  @include m.mq(tab-l) {
+    height: 60px;
+    padding: 0 5%;
+  }
+  &.js-active {
+    background-color: rgba(c.$white, 0.95);
+    box-shadow: 0 2px 12px rgba(#000, 0.05);
+  }
+}
+.l-header__logo {
+  position: relative;
+  z-index: 110;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  @include m.mq(sm) {
+    font-size: 1.8rem;
+  }
+}
+
+.l-header__right {
+  display: none;
+  @include m.mq(tab-l) {
+    display: flex;
+  }
+}
+//ハンバーガー
+.l-headerNavButton {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 110;
+  cursor: pointer;
+  .lineIcon {
+    position: relative;
+    width: 24px;
+    height: 14px;
+  }
+  .line {
+    position: absolute;
+    height: 1.5px;
+    width: 100%;
+    background-color: c.$navy;
+    transition: transform 0.4s;
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+      .is-navOpen & {
+        transform: translate3d(0, 6.25px, 0) rotate(45deg);
+      }
+    }
+    &:nth-child(2) {
+      top: calc(50% - 0.75px);
+      left: 0;
+      .is-navOpen & {
+        transform: scaleX(0);
+      }
+    }
+    &:nth-child(3) {
+      bottom: 0;
+      left: 0;
+      .is-navOpen & {
+        transform: translate3d(0, -6.25px, 0) rotate(-45deg);
+      }
+    }
+  }
+}
+//navメニュー
+.l-headerNav {
+  @include m.mq(tab-l) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: c.$white;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 105;
+    transition: opacity 0.3s;
+    .is-navOpen & {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}
+.l-headerNav__list {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  @include m.mq(tab-l) {
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+.l-headerNav__item {
+  &.--button {
+    margin-left: 4px;
+    @include m.mq(tab-l) {
+      margin: 8px 0 0;
+    }
+  }
+}
+.l-headerNav__link {
+  font-size: 1.2rem;
+  transition: opacity 0.3s;
+  @include m.mq(tab-l) {
+    font-size: 1.8rem;
+  }
+  &:hover {
+    opacity: 0.6;
+  }
+}
