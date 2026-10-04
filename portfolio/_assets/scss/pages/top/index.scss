@@ -1,0 +1,623 @@
+@charset "utf-8";
+@use "../../foundation/mixin" as m;
+@use "../../foundation/color" as c;
+
+/* ==========================================================================
+   MV
+   ========================================================================== */
+.p-mv {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 620px;
+  padding-top: 72px;
+  overflow: hidden;
+  isolation: isolate;
+  // タブレット以下は画像を上、テキストを下に縦積み
+  @include m.mq(tab-l) {
+    display: block;
+    height: auto;
+    padding: 60px 0 56px;
+  }
+}
+.p-mv__bg {
+  position: absolute;
+  inset: 0 0 0 30%;
+  z-index: -1;
+  @include m.mq(tab-l) {
+    position: relative;
+    inset: auto;
+    height: 56vw;
+  }
+  img {
+    object-position: 40% center;
+  }
+  // 画像の左端を白になじませ、見出しと重ならないようにする
+  &::after {
+    @include m.filter;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      c.$white 0%,
+      rgba(c.$white, 0.6) 15%,
+      rgba(c.$white, 0) 35%
+    );
+    @include m.mq(tab-l) {
+      background: linear-gradient(0deg, c.$white 0%, rgba(c.$white, 0) 30%);
+    }
+  }
+}
+.p-mv__inner {
+  @include m.mq(tab-l) {
+    margin-top: 16px;
+  }
+}
+.p-mv__title {
+  font-size: 4.2rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  @include m.mq(tab-l) {
+    font-size: 3.6rem;
+  }
+  @include m.mq(sm) {
+    font-size: 2.8rem;
+  }
+}
+.p-mv__text {
+  margin-top: 24px;
+  font-size: 1.4rem;
+  line-height: 2;
+  @include m.mq(sm) {
+    margin-top: 18px;
+    font-size: 1.3rem;
+  }
+}
+.p-mv__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+  @include m.mq(sm) {
+    margin-top: 26px;
+  }
+}
+.p-mv__script {
+  position: absolute;
+  right: 24%;
+  bottom: 5%;
+  font-family: "Allura", cursive;
+  font-size: 5.4rem;
+  line-height: 1;
+  color: c.$white;
+  transform: rotate(-14deg);
+  text-shadow: 0 1px 8px rgba(#000, 0.15);
+  pointer-events: none;
+  @include m.mq(tab-l) {
+    top: calc(60px + 34vw);
+    right: 26%;
+    bottom: auto;
+    font-size: 4.2rem;
+  }
+  @include m.mq(sm) {
+    font-size: 3rem;
+  }
+}
+
+// ---------- MV 表示時アニメーション
+// 画像の読み込み完了を待たずに始まるよう、JSではなくCSSアニメーションで実行
+@keyframes mvZoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes mvFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes mvWrite {
+  from {
+    clip-path: inset(-20% 100% -20% 0);
+  }
+  to {
+    clip-path: inset(-20% -10% -20% 0);
+  }
+}
+.p-mv__bg img {
+  animation: mvZoom 2.4s m.$easeOutCubic both;
+}
+.p-mv__title {
+  animation: mvFadeUp 0.9s m.$easeOutCubic 0.3s both;
+}
+.p-mv__text {
+  animation: mvFadeUp 0.9s m.$easeOutCubic 0.5s both;
+}
+.p-mv__buttons {
+  animation: mvFadeUp 0.9s m.$easeOutCubic 0.7s both;
+}
+// 筆記体を左から書いていくように表示
+.p-mv__script {
+  animation: mvWrite 1.8s m.$easeInOutCubic 1s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .p-mv__bg img,
+  .p-mv__title,
+  .p-mv__text,
+  .p-mv__buttons,
+  .p-mv__script {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   WORKS
+   ========================================================================== */
+.p-works {
+  padding: 64px 0 72px;
+  @include m.mq(sm) {
+    padding: 56px 0;
+  }
+}
+.p-works__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.p-works__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+  @include m.mq(tab-l) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 20px;
+  }
+  @include m.mq(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.p-worksCard__link {
+  position: relative;
+  display: block;
+  padding-bottom: 4px;
+  &:hover {
+    .p-worksCard__img img {
+      transform: scale(1.04);
+    }
+    .p-worksCard__arrow {
+      transform: translateX(4px);
+    }
+  }
+}
+.p-worksCard__img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: c.$beige;
+  img {
+    transition: transform 0.5s;
+  }
+}
+.p-worksCard__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.p-worksCard__tag {
+  padding: 2px 8px;
+  font-size: 1rem;
+  color: c.$textSub;
+  background-color: c.$beige;
+  border: 1px solid c.$line;
+}
+.p-worksCard__title {
+  margin-top: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+.p-worksCard__text {
+  margin-top: 6px;
+  padding-right: 24px;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: c.$textSub;
+}
+.p-worksCard__arrow {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  font-size: 1.3rem;
+  transition: transform 0.3s;
+}
+
+/* ==========================================================================
+   ABOUT / SKILLS
+   ========================================================================== */
+.p-about {
+  padding: 56px 0 64px;
+  background-color: c.$beige;
+}
+.p-about__inner {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 60px;
+  @include m.mq(tab-l) {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+}
+.p-about__body {
+  display: flex;
+  gap: 28px;
+  margin-top: 24px;
+  @include m.mq(s-t) {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+.p-about__img {
+  flex-shrink: 0;
+  width: 220px;
+  aspect-ratio: 4 / 3.3;
+  overflow: hidden;
+  @include m.mq(s-t) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+}
+.p-about__lead {
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.6;
+  @include m.mq(sm) {
+    font-size: 1.7rem;
+  }
+}
+.p-about__text {
+  margin: 14px 0 20px;
+  font-size: 1.2rem;
+  line-height: 2;
+  color: c.$textSub;
+}
+
+.p-skills__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 24px;
+  @include m.mq(tab-l) {
+    max-width: 480px;
+  }
+}
+.p-skills__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 4px 10px;
+  background-color: c.$white;
+  border-radius: 2px;
+}
+.p-skills__icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+  &.--double svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+.p-skills__name {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   PROFILE
+   ========================================================================== */
+.p-profile {
+  padding: 64px 0 72px;
+}
+.p-profile__body {
+  display: grid;
+  grid-template-columns: 30% 1fr 26%;
+  align-items: start;
+  gap: 4%;
+  margin-top: 24px;
+  padding: 0 4.5%;
+  @include m.mq(tab-l) {
+    grid-template-columns: 40% 1fr;
+    gap: 40px 5%;
+    padding: 0 5%;
+  }
+  @include m.mq(s-t) {
+    grid-template-columns: 1fr;
+  }
+}
+.p-profile__img {
+  aspect-ratio: 4 / 3.1;
+  overflow: hidden;
+  // 縦長写真のため顔が収まる位置で切り抜く
+  img {
+    object-position: center 25%;
+  }
+  @include m.mq(tab-l) {
+    grid-row: span 2;
+    aspect-ratio: 3 / 4;
+  }
+  @include m.mq(s-t) {
+    grid-row: auto;
+    aspect-ratio: 4 / 3;
+  }
+}
+.p-profile__content {
+  padding-top: 8px;
+}
+.p-profile__lead {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.7;
+  @include m.mq(sm) {
+    font-size: 1.8rem;
+  }
+}
+.p-profile__text {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  line-height: 2.1;
+  color: c.$textSub;
+}
+.p-profile__table {
+  font-size: 1.2rem;
+}
+.p-profile__row {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid c.$line;
+  dt {
+    flex-shrink: 0;
+    width: 64px;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  dd {
+    color: c.$text;
+  }
+}
+
+/* ==========================================================================
+   SERVICE
+   ========================================================================== */
+.p-service {
+  padding: 64px 0 72px;
+  background-color: c.$beige;
+}
+.p-service__lead {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1.6;
+  @include m.mq(sm) {
+    font-size: 1.9rem;
+  }
+}
+.p-service__text {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: c.$textSub;
+  @include m.mq(sm) {
+    text-align: left;
+  }
+}
+.p-service__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+  @include m.mq(tab-l) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include m.mq(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+.p-serviceCard {
+  padding: 32px 26px;
+  background-color: c.$white;
+  box-shadow: 0 2px 10px rgba(#000, 0.03);
+  &:hover .p-serviceCard__icon {
+    transform: translateY(-4px);
+  }
+}
+.p-serviceCard__icon {
+  display: block;
+  width: 34px;
+  height: 34px;
+  color: c.$navy;
+  transition: transform 0.4s m.$easeOutBack;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+.p-serviceCard__title {
+  margin-top: 20px;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+.p-serviceCard__text {
+  margin-top: 12px;
+  font-size: 1.2rem;
+  line-height: 2;
+  color: c.$textSub;
+  br {
+    @include m.mq(tab-l) {
+      display: none;
+    }
+  }
+}
+
+/* ==========================================================================
+   WORKFLOW
+   ========================================================================== */
+.p-flow {
+  padding: 56px 0 64px;
+}
+.p-flow__list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px;
+  margin-top: 32px;
+  @include m.mq(tab-l) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 22px;
+  }
+  @include m.mq(s-t) {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+.p-flowCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px 20px;
+  text-align: center;
+  border: 1px solid c.$line;
+  // 次のステップへの矢印
+  &:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -14px;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid c.$textSub;
+    border-right: 1px solid c.$textSub;
+    transform: translateY(-50%) rotate(45deg);
+    @include m.mq(tab-l) {
+      display: none;
+    }
+    @include m.mq(s-t) {
+      display: block;
+      top: auto;
+      right: auto;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%) rotate(135deg);
+    }
+  }
+}
+.p-flowCard__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  border-radius: 50%;
+  background-color: #5a6a7c;
+  color: c.$white;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.p-flowCard__icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin-top: 14px;
+  color: c.$navy;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+.p-flowCard__title {
+  margin-top: 10px;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.p-flowCard__text {
+  margin-top: 4px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: c.$textSub;
+}
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+.p-contact {
+  position: relative;
+  padding: 72px 0;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+  @include m.mq(sm) {
+    padding: 56px 0;
+  }
+}
+.p-contact__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  &::after {
+    @include m.filter;
+    z-index: 1;
+    background-color: rgba(c.$white, 0.6);
+  }
+}
+.p-contact__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  &::after {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background-color: c.$text;
+  }
+}
+.p-contact__title {
+  margin-top: 12px;
+  font-size: 2.4rem;
+  font-weight: 500;
+  @include m.mq(sm) {
+    font-size: 1.9rem;
+  }
+}
+.p-contact__text {
+  margin-top: 16px;
+  font-size: 1.2rem;
+  line-height: 2;
+  color: c.$textSub;
+  @include m.mq(sm) {
+    text-align: left;
+  }
+}
+.p-contact .c-button {
+  margin-top: 28px;
+}

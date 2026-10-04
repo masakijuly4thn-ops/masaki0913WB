@@ -1,0 +1,33 @@
+@charset "utf-8";
+@use "../foundation/mixin" as m;
+@use "../foundation/color" as c;
+
+.c-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.c-title__en {
+  font-family: "Inter", sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  @include m.mq(sm) {
+    font-size: 1.9rem;
+  }
+}
+.c-title__ja {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  color: c.$textSub;
+  &::after {
+    content: "";
+    display: block;
+    width: 18px;
+    height: 1px;
+    background-color: c.$textSub;
+  }
+}
